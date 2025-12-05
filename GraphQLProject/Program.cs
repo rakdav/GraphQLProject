@@ -1,6 +1,7 @@
 using GraphQLProject.DataAccess.DAO;
 using GraphQLProject.DataAccess.Data;
 using GraphQLProject.DataAccess.Entity;
+using HotChocolate.Execution;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,5 +21,11 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseWebSockets();
+using (var scope = app.Services.CreateScope())
+{
+    var services=scope.ServiceProvider;
+    var db=services.GetRequiredService<SampleAppDbContext>();
+    DataSeeder.SeedData(db);
+}
 app.MapGraphQL("/graphql");
 app.Run();

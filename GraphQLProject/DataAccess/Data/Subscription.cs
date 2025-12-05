@@ -2,7 +2,7 @@
 using HotChocolate.Execution;
 using HotChocolate.Subscriptions;
 
-namespace GraphQLProject.DataAccess
+namespace GraphQLProject.DataAccess.Data
 {
     public class Subscription
     {

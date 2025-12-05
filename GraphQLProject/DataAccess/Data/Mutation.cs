@@ -2,7 +2,7 @@
 using GraphQLProject.DataAccess.Entity;
 using HotChocolate.Subscriptions;
 
-namespace GraphQLProject.DataAccess
+namespace GraphQLProject.DataAccess.Data
 {
     public class Mutation
     {

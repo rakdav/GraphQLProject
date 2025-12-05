@@ -1,5 +1,5 @@
-using GraphQLProject.DataAccess;
 using GraphQLProject.DataAccess.DAO;
+using GraphQLProject.DataAccess.Data;
 using GraphQLProject.DataAccess.Entity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,5 +20,5 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseWebSockets();
-app.MapGraphQL("/graphgl");
+app.MapGraphQL("/graphql");
 app.Run();

@@ -32,7 +32,7 @@ namespace GraphQLClient.DataAccess
                 var response = await graphQLHttpClient.SendQueryAsync<object>(request);
 
                 var stringResult = response.Data.ToString();
-                stringResult = stringResult.Replace($"\"{graphQLQueryType}\":", string.Empty);
+                stringResult = stringResult!.Replace($"\"{graphQLQueryType}\":", string.Empty);
                 stringResult = stringResult.Remove(0, 1);
                 stringResult = stringResult.Remove(stringResult.Length - 1, 1);
 
@@ -57,7 +57,7 @@ namespace GraphQLClient.DataAccess
                 var response = await graphQLHttpClient.SendQueryAsync<object>(request);
 
                 var stringResult = response.Data.ToString();
-                stringResult = stringResult.Replace($"\"{graphQLQueryType}\":", string.Empty);
+                stringResult = stringResult!.Replace($"\"{graphQLQueryType}\":", string.Empty);
                 stringResult = stringResult.Remove(0, 1);
                 stringResult = stringResult.Remove(stringResult.Length - 1, 1);
 

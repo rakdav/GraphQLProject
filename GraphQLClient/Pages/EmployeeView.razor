@@ -1,0 +1,50 @@
+﻿@page "/EmployeeView"
+@using GraphQLClient.DataAccess
+@using GraphQLClient.DataAccess.Model
+
+<h3>EmployeeView</h3>
+@if (AllEmployees.Count == 0)
+{
+    <p><em>Loading ....</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>Department Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var emp in AllEmployees)
+            {
+                <tr>
+                    <td>@emp.Name</td>
+                    <td>@emp.Email</td>
+                    <td>@emp.Age</td>
+                    <td>@emp.Department.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    private List<Employee> AllEmployees = new List<Employee>();
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            string completeQuery = "query{allEmployeeWithDepartment{name,age,departmentId,email,employeeId,department{name,departmentId}}}";
+            string qraphQLQueryType = "allEmployeeWithDepartment";
+            var result = await Query.ExceuteQueryReturnListAsyn<Employee>(qraphQLQueryType, completeQuery);
+            AllEmployees = result;
+        }
+        catch(Exception ex)
+        {
+            throw ex;
+        }
+    }
+}

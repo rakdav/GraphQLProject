@@ -38,7 +38,7 @@ namespace GraphQLClient.DataAccess
 
                 var result = JsonConvert.DeserializeObject<List<T>>(stringResult);
 
-                return result;
+                return result!;
             }
             catch (Exception ex)
             {
@@ -63,7 +63,7 @@ namespace GraphQLClient.DataAccess
 
                 var result = JsonConvert.DeserializeObject<T>(stringResult);
 
-                return result;
+                return result!;
             }
             catch (Exception ex)
             {

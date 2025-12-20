@@ -32,17 +32,14 @@ namespace GraphQLProject.DataAccess.DAO
         }
         public async Task<Employee> EditEmployee(Employee emp)
         {
-            var empToUpdate = await _context.Employee.FindAsync(emp.EmployeeId);
-            if (empToUpdate != null)
-            {
-                empToUpdate.Age= emp.Age;
-                empToUpdate.Email= emp.Email;
-                empToUpdate.Name = emp.Name;
-                empToUpdate.Department= emp.Department;
-                await _context.SaveChangesAsync();
-                return empToUpdate;
-            }
-            return emp;
+            var empToUpdate = GetEmployeeById(emp.EmployeeId);
+            if (empToUpdate == null) return null;
+            empToUpdate.Age= emp.Age;
+            empToUpdate.Email= emp.Email;
+            empToUpdate.Name = emp.Name;
+            empToUpdate.Department= emp.Department;
+            await _context.SaveChangesAsync();
+            return empToUpdate;
         }
         public async Task DeleteEmployee(int id)
         {

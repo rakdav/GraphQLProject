@@ -44,9 +44,9 @@ namespace GraphQLProject.DataAccess.DAO
             }
             return emp;
         }
-        public async Task DeleteEmployee(Employee emp)
+        public async Task DeleteEmployee(int id)
         {
-            var empToUpdate = await _context.Employee.FindAsync(emp.EmployeeId);
+            var empToUpdate = await _context.Employee.FindAsync(id);
             if (empToUpdate != null)
             {
                 _context.Employee.Remove(empToUpdate);

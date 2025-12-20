@@ -35,6 +35,13 @@
     new CreateEmployeeModel();
     private async Task CreateButtonClick()
     {
-        
+        try
+        {
+            string query=$"mutation{{createWithDepartmentName(name: \"{createEmployee.Name}\",age: {createEmployee.Age},mail: \"{createEmployee.Email}\",depName: \"{createEmployee.DepartmentName}\"){{name,employeeId,departmentId}}}}";
+        }
+        catch(Exception ex)
+        {
+            throw;
+        }
     }
 }

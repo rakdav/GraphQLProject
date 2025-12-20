@@ -1,0 +1,18 @@
+﻿@page "/EditEmployee/{Id:int}"
+@using GraphQLClient.DataAccess
+@using GraphQLClient.DataAccess.Model
+
+@inject NavigationManager NavigationManager
+<h3>Редактирование работника</h3>
+
+@code {
+    [Parameter]
+    public int? Id{ get; set; }
+    private Employee employee = new Employee();
+    protected override async Task OnInitializedAsync()
+    {
+        string completeQuery = $"query{{employerById(id: {Id}){{name,email,age,department{{name,departmentId}}}}";
+        string qraphQLQueryType = "allEmployeeWithDepartment";
+        var result = await Query.ExceuteQueryReturnListAsyn<Employee>(qraphQLQueryType, completeQuery);
+    }
+}

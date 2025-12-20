@@ -18,11 +18,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\delete.png" />
+    <Content Remove="wwwroot\edit.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="GraphQL.Client" Version="6.1.0" />
     <PackageReference Include="GraphQL.Client.Serializer.Newtonsoft" Version="6.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.10" PrivateAssets="all" />
     <PackageReference Include="modernhttpclient" Version="2.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="wwwroot\delete.png" />
+    <Resource Include="wwwroot\edit.png" />
   </ItemGroup>
 
 </Project>

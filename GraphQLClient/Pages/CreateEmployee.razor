@@ -38,6 +38,10 @@
         try
         {
             string query=$"mutation{{createWithDepartmentName(name: \"{createEmployee.Name}\",age: {createEmployee.Age},mail: \"{createEmployee.Email}\",depName: \"{createEmployee.DepartmentName}\"){{name,employeeId,departmentId}}}}";
+            string graphQLQueryType = "createWithDepartmentName";
+            var result = await Mutation.ExceuteMutationAsyn<CreateEmployeeReturnModel>(graphQLQueryType, query);
+            createEmployeeReturnModel = result;
+            NavigationManager.NavigateTo($"EmployeeView");
         }
         catch(Exception ex)
         {

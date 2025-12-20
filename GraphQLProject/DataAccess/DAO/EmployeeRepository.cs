@@ -33,7 +33,7 @@ namespace GraphQLProject.DataAccess.DAO
         public async Task<Employee> EditEmployee(Employee emp)
         {
             var empToUpdate = GetEmployeeById(emp.EmployeeId);
-            if (empToUpdate == null) return null;
+            if (empToUpdate == null) return null!;
             empToUpdate.Age= emp.Age;
             empToUpdate.Email= emp.Email;
             empToUpdate.Name = emp.Name;

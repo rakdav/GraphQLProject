@@ -2,7 +2,10 @@
 @using GraphQLClient.DataAccess
 @using GraphQLClient.DataAccess.Model
 
-<h3>EmployeeView</h3>
+@inject NavigationManager NavigationManager
+
+<h3>Список работников</h3>
+<a href="/CreateEmployee" class="btn btn-primary">Создать работника</a>
 @if (AllEmployees.Count == 0)
 {
     <p><em>Loading ....</em></p>

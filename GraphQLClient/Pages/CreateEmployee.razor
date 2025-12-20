@@ -1,0 +1,40 @@
+﻿@page "/CreateEmployee"
+@using GraphQLClient.DataAccess
+@using GraphQLClient.DataAccess.Model
+
+@inject NavigationManager NavigationManager
+<h3>Создание работника</h3>
+<div class="row">
+    <EditForm Model="@createEmployee" OnValidSubmit="@CreateButtonClick">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+        <div class="form-group">
+            Имя:<InputText id="name" @bind-Value="createEmployee.Name"
+                            class="form-control"/>
+        </div>
+        <div class="form-group">
+            Email:<InputText id="email" @bind-Value="createEmployee.Email"
+                           class="form-control" />
+        </div>
+        <div class="form-group">
+            Возраст:<InputNumber id="age" @bind-Value="createEmployee.Age"
+                           class="form-control" />
+        </div>
+        <div class="form-group">
+            Отделение:<InputText id="departmentName" 
+                @bind-Value="createEmployee.DepartmentName"
+                             class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-success">Создать</button>
+    </EditForm>
+</div>
+@code {
+    private CreateEmployeeReturnModel createEmployeeReturnModel =
+        new CreateEmployeeReturnModel();
+    private CreateEmployeeModel createEmployee =
+    new CreateEmployeeModel();
+    private async Task CreateButtonClick()
+    {
+        
+    }
+}

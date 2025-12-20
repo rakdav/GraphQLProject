@@ -4,7 +4,31 @@
 
 @inject NavigationManager NavigationManager
 <h3>Редактирование работника</h3>
-
+<div class="row">
+    <EditForm Model="@employee" OnValidSubmit="@EditButtonClick">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            Имя:<InputText id="name" @bind-Value="employee.Name"
+                           class="form-control" />
+        </div>
+        <div class="form-group">
+            Email:<InputText id="email" @bind-Value="employee.Email"
+                             class="form-control" />
+        </div>
+        <div class="form-group">
+            Возраст:<InputNumber id="age" @bind-Value="employee.Age"
+                                 class="form-control" />
+        </div>
+        <div class="form-group">
+            Отделение:<InputText id="departmentName"
+                                 @bind-Value="employee.Department.Name"
+                                 class="form-control"/>
+        </div>
+        <button type="submit" class="btn btn-success">Сохранить</button>
+    </EditForm>
+</div>
+<a href="/EmployeeView">Назад</a>
 @code {
     [Parameter]
     public int? Id{ get; set; }
@@ -13,6 +37,23 @@
     {
         string completeQuery = $"query{{employerById(id: {Id}){{name,email,age,department{{name,departmentId}}}}";
         string qraphQLQueryType = "allEmployeeWithDepartment";
-        var result = await Query.ExceuteQueryReturnListAsyn<Employee>(qraphQLQueryType, completeQuery);
+        var result = await Query.ExceuteQueryAsyn<Employee>(qraphQLQueryType, completeQuery);
+        if (result == null)
+        {
+            NavigationManager.NavigateTo($"EmployeeView");
+        }
+        employee = result!;
+    }
+    private async Task EditButtonClick()
+    {
+        try
+        {
+           
+            NavigationManager.NavigateTo($"EmployeeView");
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
 }

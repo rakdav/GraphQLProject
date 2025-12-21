@@ -11,7 +11,7 @@ namespace GraphQLClient.DataAccess
         private static GraphQLHttpClient? graphQLHttpClient;
         static Mutation()
         {
-            var uri = new Uri("https://192.168.110.44:7153/graphql/");
+            var uri = new Uri("https://localhost:7153/graphql/");
             var graphQLOptions = new GraphQLHttpClientOptions
             {
                 EndPoint = uri,

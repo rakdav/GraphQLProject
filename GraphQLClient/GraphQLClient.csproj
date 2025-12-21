@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="wwwroot\delete.png" />
-    <Resource Include="wwwroot\edit.png" />
+    <Resource Include="wwwroot\images\delete.png" />
+    <Resource Include="wwwroot\images\edit.png" />
   </ItemGroup>
 
 </Project>

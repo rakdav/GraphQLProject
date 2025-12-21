@@ -50,9 +50,9 @@ namespace GraphQLProject.DataAccess.Data
             var editEmp = await employeeRepository.EditEmployee(emp);
             return editEmp;
         }
-        public async Task DeleteEmployer([Service] EmployeeRepository employeeRepository, [Service] ITopicEventSender eventSender, int id)
+        public async Task<Employee> DeleteEmployer([Service] EmployeeRepository employeeRepository, [Service] ITopicEventSender eventSender, int id)
         {
-            await employeeRepository.DeleteEmployee(id);
+            return await employeeRepository.DeleteEmployee(id);
         }
     }
 }

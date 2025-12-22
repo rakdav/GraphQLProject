@@ -9,7 +9,6 @@
 @inject NavigationManager NavigationManager
 
 <h3>Список работников</h3>
-<a href="/CreateEmployee" class="btn btn-primary">Создать работника</a>
 @if (AllEmployees.Count == 0)
 {
     <p><em>Loading ....</em></p>
@@ -55,6 +54,7 @@ else
                         ShowPageInfo="true" PageChanged="@OnCustomPageChanged" />
     </div>
     }
+    <a href="/CreateEmployee" class="btn btn-primary">Создать работника</a>
 }
 @code {
     private List<Employee> AllEmployees = new();

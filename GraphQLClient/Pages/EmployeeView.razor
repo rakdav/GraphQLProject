@@ -27,17 +27,23 @@ else
           PageSizeSelectorItems="@(new int[] { 5,10,20 })"
           Responsive="true">
     <GridColumns>
-            <GridColumn TItem="Employee" HeaderText="Имя работника" PropertyName="Name" SortKeySelector="item => item.Name">
+        <GridColumn TItem="Employee" HeaderText="Имя работника" PropertyName="Name" SortKeySelector="item => item.Name">
             @context.Name
         </GridColumn>
-            <GridColumn TItem="Employee" HeaderText="Возраст работника" PropertyName="Age" SortKeySelector="item => item.Age">
+            <GridColumn TItem="Employee" HeaderText="Возраст работника" PropertyName="Age" SortKeySelector="item => item.Age" TextAlignment="Alignment.Center">
             @context.Age
         </GridColumn>
-            <GridColumn TItem="Employee" HeaderText="Email работника" PropertyName="Email" SortKeySelector="item => item.Email">
+        <GridColumn TItem="Employee" HeaderText="Email работника" PropertyName="Email" SortKeySelector="item => item.Email">
             @context.Email
         </GridColumn>
-            <GridColumn TItem="Employee" HeaderText="Подразделение работника" PropertyName="DepartmentName" SortKeySelector="item => item.Department!.Name">
+        <GridColumn TItem="Employee" HeaderText="Подразделение работника" PropertyName="DepartmentName" SortKeySelector="item => item.Department!.Name">
             @context.Department!.Name
+        </GridColumn>
+            <GridColumn TItem="Employee" HeaderText="Редактирование" PropertyName="EmployeeId" Filterable=false TextAlignment="Alignment.Center">
+            <a href="/EditEmployee/@context.EmployeeId"><img src="images/edit.png" class="imgEmployer" /></a>
+        </GridColumn>
+        <GridColumn TItem="Employee" HeaderText="Удаление" PropertyName="EmployeeId" Filterable=false TextAlignment="Alignment.Center">
+            <a href="/DeleteEmployee/@context.EmployeeId"><img src="images/delete.png" class="imgEmployer"/></a>
         </GridColumn>
     </GridColumns>
     </Grid>

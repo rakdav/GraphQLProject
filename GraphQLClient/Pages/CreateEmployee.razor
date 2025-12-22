@@ -21,33 +21,35 @@
             Возраст:<InputNumber id="age" @bind-Value="createEmployee.Age"
                            class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-5 col-sm-12">
-                Отделение:<AutoComplete @bind-Value="selectedValue"
-                TItem="DepartmentReturnModel" DataProvider="CustomersDataProvider"
-                PropertyName="SelectedValue" Placeholder="Search a department..."
-                StringComparison="StringComparison.Ordinal"
-                OnChanged="(DepartmentReturnModel customer) => OnAutoCompleteChanged(customer)" />
-            </div>
+        <div class="form-group">
+            <InputSelect TValue="int?" bind-Value="DepartmentId"
+                         ValueExpression="@(() => DepartmentId)">
+                    @foreach (var dept in departmentList!)
+                    {
+                        <option value="@dept.DepartmentId">@dept.Name</option>
+                    }
+                </InputSelect>
         </div>
         <button type="submit" class="btn btn-success">Создать</button>
     </EditForm>
 </div>
 <a href="/EmployeeView"><i class="bi bi-backspace"></i></a>
-@code {
+@code
+{
     private CreateEmployeeReturnModel createEmployeeReturnModel =
     new CreateEmployeeReturnModel();
     private CreateEmployeeModel createEmployee =
     new CreateEmployeeModel();
-    public IEnumerable<DepartmentReturnModel>? departmentList;
-    private string? selectedValue;
+    private IEnumerable<DepartmentReturnModel>? departmentList;
+    private int? DepartmentId;
 
-    private async Task<AutoCompleteDataProviderResult<DepartmentReturnModel>> CustomersDataProvider(AutoCompleteDataProviderRequest<DepartmentReturnModel> request)
+    protected override async Task OnInitializedAsync()
     {
-        if (departmentList is null) // pull customers only one time for client-side autocomplete
-            departmentList =await GetDepartments(); // call a service or an API to pull the customers
-
-        return await Task.FromResult(request.ApplyTo(departmentList.OrderBy(customer => customer.Name)));
+        departmentList = await GetDepartments();
+    }
+    private void HandleCountryChange(int selectedValue)
+    {
+        DepartmentId = selectedValue;
     }
     private async Task CreateButtonClick()
     {
@@ -76,9 +78,5 @@
         {
             throw;
         }
-    }
-    private void OnAutoCompleteChanged(DepartmentReturnModel model)
-    {
-        
     }
 }

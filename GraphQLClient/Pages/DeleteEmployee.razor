@@ -1,0 +1,74 @@
+﻿@page "/DeleteEmployee/{Id:int}"
+@using GraphQLClient.DataAccess
+@using GraphQLClient.DataAccess.Model
+
+@inject NavigationManager NavigationManager
+<h3>Удаление работника</h3>
+@if(employee.Name==null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h2>@employee.Name</h2>
+
+    <div>
+        <div>
+            Возраст:<span style="font-size:large">@employee.Age</span>
+            <br />
+        </div>
+
+        <div>
+            Email: <span style="font-size:large">@employee.Email</span>
+            <br />
+        </div>
+
+        <div>
+            Отделение: <span style="font-size:large">@employee.Department.Name</span>
+            <br />
+        </div>
+        <div>
+            <span class="alert-danger">Вы действительно удалить @employee.Name?</span>
+            <br/>
+        </div>
+        <div>
+            <button class="btn btn-primary" @onclick="Delete">Да</button>
+            <button class="btn btn-secondary" @onclick="Back">Нет</button>
+        </div>
+    </div>
+}
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+    private Employee employee = new Employee();
+    protected override async Task OnInitializedAsync()
+    {
+        string completeQuery = "query{employerById(id:" + Id + "){employeeId,name,email,age,department{name,departmentId}}}";
+        string qraphQLQueryType = "employerById";
+        var result = await Query.ExceuteQueryAsyn<Employee>(qraphQLQueryType, completeQuery);
+        if (result == null)
+        {
+            NavigationManager.NavigateTo($"EmployeeView");
+        }
+        employee = result!;
+        employee.DepartmentId = result!.Department.DepartmentId;
+    }
+    private void Back()
+    {
+        NavigationManager.NavigateTo($"EmployeeView");
+    }
+    private async Task Delete()
+    {
+        try
+        {
+            string query = "mutation{deleteEmployer(id:"+Id+"){name}}";
+            string graphQLQueryType = "deleteEmployer";
+            await Mutation.ExceuteMutationAsyn<CreateEmployeeReturnModel>(graphQLQueryType, query);
+            NavigationManager.NavigateTo($"EmployeeView");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+}

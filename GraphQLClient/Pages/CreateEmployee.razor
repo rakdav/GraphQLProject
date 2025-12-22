@@ -28,7 +28,7 @@
         <button type="submit" class="btn btn-success">Создать</button>
     </EditForm>
 </div>
-<a href="/EmployeeView">Назад</a>
+<a href="/EmployeeView"><i class="bi bi-backspace"></i></a>
 @code {
     private CreateEmployeeReturnModel createEmployeeReturnModel =
         new CreateEmployeeReturnModel();
@@ -44,7 +44,7 @@
             createEmployeeReturnModel = result;
             NavigationManager.NavigateTo($"EmployeeView");
         }
-        catch(Exception ex)
+        catch(Exception)
         {
             throw;
         }

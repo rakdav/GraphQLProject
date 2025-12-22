@@ -4,7 +4,6 @@
 
 @inject NavigationManager NavigationManager
 <h3>Редактирование работника</h3>
-<div class="row">
     <EditForm Model="@employee" OnValidSubmit="@EditButtonClick">
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -27,7 +26,6 @@
         </div>
         <button type="submit" class="btn btn-success">Сохранить</button>
     </EditForm>
-</div>
 <a href="/EmployeeView">Назад</a>
 @code {
     [Parameter]
@@ -35,23 +33,26 @@
     private Employee employee = new Employee();
     protected override async Task OnInitializedAsync()
     {
-        string completeQuery = $"query{{employerById(id: {Id}){{name,email,age,department{{name,departmentId}}}}";
-        string qraphQLQueryType = "allEmployeeWithDepartment";
+        string completeQuery = "query{employerById(id:"+Id+"){employeeId,name,email,age,department{name,departmentId}}}";
+        string qraphQLQueryType = "employerById";
         var result = await Query.ExceuteQueryAsyn<Employee>(qraphQLQueryType, completeQuery);
         if (result == null)
         {
             NavigationManager.NavigateTo($"EmployeeView");
         }
         employee = result!;
+        employee.DepartmentId = result!.Department.DepartmentId;
     }
     private async Task EditButtonClick()
     {
         try
         {
-           
+            string query = "mutation{editEmployee(age:"+employee.Age+",depName: \"" + employee.Department.Name + "\",employeeId:" + employee.EmployeeId + ",mail:\"" + employee.Email + "\",name:\"" + employee.Name + "\"){name,employeeId,departmentId}}";
+            string graphQLQueryType = "editEmployee";
+            await Mutation.ExceuteMutationAsyn<CreateEmployeeReturnModel>(graphQLQueryType, query);
             NavigationManager.NavigateTo($"EmployeeView");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             throw;
         }

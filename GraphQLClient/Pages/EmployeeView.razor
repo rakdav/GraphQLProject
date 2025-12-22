@@ -1,6 +1,10 @@
 ﻿@page "/EmployeeView"
+@using BlazorBootstrap
 @using GraphQLClient.DataAccess
 @using GraphQLClient.DataAccess.Model
+@using System.ComponentModel.DataAnnotations
+@using System.Drawing
+
 
 @inject NavigationManager NavigationManager
 
@@ -24,22 +28,45 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach(var emp in AllEmployees)
+            @foreach (var emp in ShowEmployees)
             {
                 <tr>
                     <td>@emp.Name</td>
                     <td>@emp.Email</td>
                     <td>@emp.Age</td>
                     <td>@emp.Department.Name</td>
-                    <td><a href=""><img src="images/edit.png"></a></td>
-                    <td><a href=""><i class="bi bi-pencil"></i>Удалить</a></td>
+                    <td><a href="/EditEmployee/@emp.EmployeeId"><img src="images/edit.png" class="imgEmployer"></a></td>
+                    <td><a href="/DeleteEmployee/@emp.EmployeeId"><img src="images/delete.png" class="imgEmployer"></a></td>
                 </tr>
             }
         </tbody>
     </table>
+    @if (showCustomPagination)
+    {
+        <div class="d-flex justify-content-between align-items-center mt-3">
+        <div>
+            <span class="text-muted">
+                Показано @((currentPage - 1) * pageSize + 1)-@Math.Min(currentPage * pageSize, totalCount) 
+                из @totalCount записей
+            </span>
+        </div>
+            <Pagination ActivePageNumber="@currentPage" TotalPages ="@totalPages"
+                        Size="PaginationSize.Small" Alignment="Alignment.End"
+                        ShowPageInfo="true" PageChanged="@OnCustomPageChanged" />
+    </div>
+    }
 }
 @code {
-    private List<Employee> AllEmployees = new List<Employee>();
+    private List<Employee> AllEmployees = new();
+    //Пагинация
+    private List<Employee> ShowEmployees = new();
+    private int totalCount = 0;
+    private int currentPage = 1;
+    private int pageSize = 10;
+    private int totalPages => (int)Math.Ceiling(totalCount / (double)pageSize);
+    private bool showCustomPagination = false;
+    private static readonly int[] PageItemsSource = new int[] { 5, 10, 20, 50, 100 };
+
     protected override async Task OnInitializedAsync()
     {
         try
@@ -48,10 +75,31 @@ else
             string qraphQLQueryType = "allEmployeeWithDepartment";
             var result = await Query.ExceuteQueryReturnListAsyn<Employee>(qraphQLQueryType, completeQuery);
             AllEmployees = result;
+            totalCount = AllEmployees.Count;
+            if (totalCount > 10) showCustomPagination = true;
+            await LoadDataAsync();
         }
         catch(Exception ex)
         {
             throw ex;
         }
+    }
+    private async Task LoadDataAsync()
+    {
+        await Task.Delay(100);
+        ShowEmployees = GetUsersForPage(currentPage,pageSize);
+    }
+    
+    private async Task OnCustomPageChanged(int page)
+    {
+        await Task.Run(() => { currentPage = page; });
+        await LoadDataAsync();
+    }
+    private List<Employee> GetUsersForPage(int page, int pageSize)
+    {
+        return AllEmployees
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
     }
 }

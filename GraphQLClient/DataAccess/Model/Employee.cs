@@ -9,7 +9,7 @@ namespace GraphQLClient.DataAccess.Model
         public string? Email { get; set; }
         public int Age { get; set; }
         public int DepartmentId { get; set; }
-        public Department Department { get; set; }
+        public Department? Department { get; set; }
         public override string ToString()
         {
             return $"EmployeeId: {EmployeeId},\n" +
@@ -17,7 +17,7 @@ namespace GraphQLClient.DataAccess.Model
                 $"Email: {Email},\n" +
                 $"Age: {Age},\n" +
                 $"DepartmentId: {DepartmentId},\n" +
-                $"Department:[ {Department.ToString()}]\n";
+                $"Department:[ {Department!.ToString()}]\n";
         }
     }
 }

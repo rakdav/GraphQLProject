@@ -20,9 +20,13 @@
                                  class="form-control" />
         </div>
         <div class="form-group">
-            Отделение:<InputText id="departmentName"
-                                 @bind-Value="employee.Department.Name"
-                                 class="form-control"/>
+        Подразделение:<InputSelect TValue="int" @bind-Value="employee.DepartmentId"
+                                   class="form-control">
+            @foreach (var dept in departmentList!)
+            {
+                <option value="@dept.DepartmentId">@dept.Name</option>
+            }
+        </InputSelect>
         </div>
         <button type="submit" class="btn btn-success">Сохранить</button>
     </EditForm>
@@ -31,8 +35,10 @@
     [Parameter]
     public int? Id{ get; set; }
     private Employee employee = new Employee();
+    private IEnumerable<DepartmentReturnModel>? departmentList;
     protected override async Task OnInitializedAsync()
     {
+        departmentList = await GetDepartments();
         string completeQuery = "query{employerById(id:"+Id+"){employeeId,name,email,age,department{name,departmentId}}}";
         string qraphQLQueryType = "employerById";
         var result = await Query.ExceuteQueryAsyn<Employee>(qraphQLQueryType, completeQuery);
@@ -41,16 +47,29 @@
             NavigationManager.NavigateTo($"EmployeeView");
         }
         employee = result!;
-        employee.DepartmentId = result!.Department.DepartmentId;
+        employee.DepartmentId = result!.Department!.DepartmentId;
     }
     private async Task EditButtonClick()
     {
         try
         {
-            string query = "mutation{editEmployee(age:"+employee.Age+",depName: \"" + employee.Department.Name + "\",employeeId:" + employee.EmployeeId + ",mail:\"" + employee.Email + "\",name:\"" + employee.Name + "\"){name,employeeId,departmentId}}";
+            string query = "mutation{editEmployee(age:"+employee.Age+",depId:" + employee.DepartmentId + ",employeeId:" + employee.EmployeeId + ",mail:\"" + employee.Email + "\",name:\"" + employee.Name + "\"){name,employeeId,departmentId}}";
             string graphQLQueryType = "editEmployee";
-            await Mutation.ExceuteMutationAsyn<CreateEmployeeReturnModel>(graphQLQueryType, query);
+            var result=await Mutation.ExceuteMutationAsyn<CreateEmployeeReturnModel>(graphQLQueryType, query);
             NavigationManager.NavigateTo($"EmployeeView");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+    private async Task<IEnumerable<DepartmentReturnModel>> GetDepartments()
+    {
+        try
+        {
+            string query = "query{allDepartmentOnly{departmentId,name}}";
+            string graphQLQueryType = "allDepartmentOnly";
+            return await Query.ExceuteQueryReturnListAsyn<DepartmentReturnModel>(graphQLQueryType, query);
         }
         catch (Exception)
         {

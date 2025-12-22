@@ -37,7 +37,7 @@ namespace GraphQLProject.DataAccess.Data
             var createEmp = await employeeRepository.CreateEmployee(emp);
             return createEmp;
         }
-        public async Task<Employee> EditEmployee([Service] EmployeeRepository employeeRepository, [Service] ITopicEventSender eventSender,int employeeId, string name, int age, string mail, string depName)
+        public async Task<Employee> EditEmployee([Service] EmployeeRepository employeeRepository, [Service] ITopicEventSender eventSender,int employeeId, string name, int age, string mail, int depId)
         {
             Employee emp = new Employee
             {
@@ -45,7 +45,7 @@ namespace GraphQLProject.DataAccess.Data
                 Name = name,
                 Age = age,
                 Email = mail,
-                Department = new Department { Name = depName }
+                DepartmentId=depId
             };
             var editEmp = await employeeRepository.EditEmployee(emp);
             return editEmp;

@@ -11,8 +11,8 @@ namespace GraphQLClient.DataAccess.Model
         [Required(ErrorMessage = "Age Name is required")]
         [Range(minimum:20,maximum:50)]
         public int Age { get; set; }
-        [Required(ErrorMessage = "Department Name is required")]
-        public string? DepartmentName { get; set; }
+        [Required(ErrorMessage = "Department Id is required")]
+        public int DepartmentId { get; set; }
 
 
     }

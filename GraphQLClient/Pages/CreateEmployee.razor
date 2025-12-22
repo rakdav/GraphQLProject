@@ -1,4 +1,5 @@
 ﻿@page "/CreateEmployee"
+@using BlazorBootstrap
 @using GraphQLClient.DataAccess
 @using GraphQLClient.DataAccess.Model
 
@@ -21,9 +22,11 @@
                            class="form-control" />
         </div>
         <div class="form-group">
-            Отделение:<InputText id="departmentName" 
-                @bind-Value="createEmployee.DepartmentName"
-                             class="form-control" />
+            Отделение:<AutoComplete @bind-Value="selectedValue"
+            TItem="DepartmentReturnModel" DataProvider="CustomersDataProvider"
+            PropertyName="SelectedValue" Placeholder="Search a department..."
+            StringComparison="StringComparison.Ordinal"
+            OnChanged="(DepartmentReturnModel customer) => OnAutoCompleteChanged(customer)" />
         </div>
         <button type="submit" class="btn btn-success">Создать</button>
     </EditForm>
@@ -31,9 +34,19 @@
 <a href="/EmployeeView"><i class="bi bi-backspace"></i></a>
 @code {
     private CreateEmployeeReturnModel createEmployeeReturnModel =
-        new CreateEmployeeReturnModel();
+    new CreateEmployeeReturnModel();
     private CreateEmployeeModel createEmployee =
     new CreateEmployeeModel();
+    public IEnumerable<DepartmentReturnModel>? departmentList;
+    private string? selectedValue;
+
+    private async Task<AutoCompleteDataProviderResult<DepartmentReturnModel>> CustomersDataProvider(AutoCompleteDataProviderRequest<DepartmentReturnModel> request)
+    {
+        if (departmentList is null) // pull customers only one time for client-side autocomplete
+            departmentList =await GetDepartments(); // call a service or an API to pull the customers
+
+        return await Task.FromResult(request.ApplyTo(departmentList.OrderBy(customer => customer.Name)));
+    }
     private async Task CreateButtonClick()
     {
         try
@@ -48,5 +61,22 @@
         {
             throw;
         }
+    }
+    private async Task<IEnumerable<DepartmentReturnModel>> GetDepartments()
+    {
+        try
+        {
+            string query = "query{allDepartmentOnly{departmentId,name}}";
+            string graphQLQueryType = "allDepartmentOnly";
+            return await Query.ExceuteQueryReturnListAsyn<DepartmentReturnModel>(graphQLQueryType, query);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+    private void OnAutoCompleteChanged(DepartmentReturnModel model)
+    {
+        
     }
 }
